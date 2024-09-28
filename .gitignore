@@ -163,3 +163,5 @@ cython_debug/
 .myenv/
 .venv/
 .vscode/
+exports/
+uploads/

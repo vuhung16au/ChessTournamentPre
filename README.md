@@ -22,7 +22,9 @@ open `http://localhost:5430/`
 ## Add a new player 
 ![alt text](image-2.png)
 
-# Note on https://github.com/xRuiAlves/fide-ratings-scraper
+# Note on fide-ratings-scraper
+
+`fide-ratings-scraper` is a npm package the helps fetching FIDE info from the server. 
 
 Installation: `npm i -g fide-ratings-scraper`
 Get player info: `fide-ratings-scraper get <FideID>`

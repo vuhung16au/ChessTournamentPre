@@ -5,6 +5,10 @@ from flask import Flask, flash, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import subprocess
 import json
+import csv
+from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 
@@ -236,6 +240,74 @@ def scrap_fide_info(FideID):
     db.session.commit()
 
     return redirect(url_for('edit_player', FideID=FideID))
+
+
+@app.route('/export_players')
+def export_players():
+    players = ChessPlayers.query.all()
+    filename = f"ChessPlayer-{datetime.now().strftime('%Y%m%d')}.csv"
+    filepath = os.path.join('exports', filename)
+
+    os.makedirs('exports', exist_ok=True)
+
+    with open(filepath, 'w', newline='') as csvfile:
+        fieldnames = [column.name for column in ChessPlayers.__table__.columns]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for player in players:
+            writer.writerow({field: getattr(player, field) for field in fieldnames})
+
+    return redirect(url_for('static', filename=f'exports/{filename}'))
+
+@app.route('/import_players', methods=['GET', 'POST'])
+def import_players():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and file.filename.endswith('.csv'):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join('uploads', filename)
+            os.makedirs('uploads', exist_ok=True)
+            file.save(filepath)
+
+            with open(filepath, newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    fide_player = ChessPlayers(
+                        FideID=int(row['FideID']),
+                        FullName=row['FullName'],
+                        Federation=row.get('Federation'),
+                        Sex=row.get('Sex'),
+                        YearOfBirth=int(row['YearOfBirth']) if row.get('YearOfBirth') else None,
+                        FIDETitle=row.get('FIDETitle'),
+                        RatingStandard=int(row['RatingStandard']) if row.get('RatingStandard') else None,
+                        RatingRapid=int(row['RatingRapid']) if row.get('RatingRapid') else None,
+                        RatingBlitz=int(row['RatingBlitz']) if row.get('RatingBlitz') else None,
+                        ACFID=row.get('ACFID'),
+                        RatingACFStandard=row.get('RatingACFStandard'),
+                        RatingACFQuick=row.get('RatingACFQuick'),
+                        ChessTempo=row.get('ChessTempo'),
+                        ChessBase=row.get('ChessBase'),
+                        ChessCom=row.get('ChessCom'),
+                        LiChess=row.get('LiChess'),
+                        Chess365=row.get('Chess365'),
+                        ChessGames=row.get('ChessGames'),
+                        ChessResults=row.get('ChessResults')
+                    )
+                    existing_player = ChessPlayers.query.filter(
+                        (ChessPlayers.FideID == fide_player.FideID) | (ChessPlayers.FullName == fide_player.FullName)
+                    ).first()
+
+                    if not existing_player:
+                        db.session.add(fide_player)
+
+                db.session.commit()
+            flash('Players imported successfully', 'success')
+            return redirect(url_for('list_players'))
+        else:
+            flash('Invalid file format. Please upload a CSV file.', 'error')
+
+    return render_template('import_players.html')
 
 if __name__ == '__main__':
 
