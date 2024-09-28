@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .centered-form {
+                max-width: 500px;
+                margin: auto;
+                padding: 20px;
+            }
+            .navbar-toggler {
+                border: none;
+            }
+            .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+            }
+        </style>
+        <title>Fide Players - Add new Fide player</title>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="container centered-form">
+            <h3 class="text-center">Chess Players List </h3>
+            <hr/>
+            
+            {%- for category, message in get_flashed_messages(with_categories = true) %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {%- endfor %}
+            <script>
+                window.setTimeout(function() {
+                    $(".alert").alert('close');
+                }, 3000);
+            </script>
+            
+            <form action="{{ request.path }}" method="post">
+                <div class="form-group">
+                    <label for="fideid">Fide ID</label>
+                    <input type="text" class="form-control" name="FideID" placeholder="FideID" required />
+
+                    <div class="invalid-feedback">
+                        Please enter a valid FideID (must be a number and not blank).
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                            setTimeout(function() {
+                                $(".invalid-feedback").fadeOut('slow');
+                            }, 2000);
+
+                            $("form").on("submit", function(event) {
+                                var fideID = $("input[name='FideID']").val();
+                                if (!fideID.match(/^\d+$/)) {
+                                    event.preventDefault();
+                                    alert("Please enter a valid Fide ID (must be a number and not blank).");
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>  <a href="#" id="search-fide" class="btn btn-link">| Search fide.com</a>
+                    <input type="text" class="form-control" name="FullName" placeholder="Full Name" required />
+                    
+                </div>
+                <script>
+                    document.getElementById('search-fide').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:fide.com';
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+                <div class="form-group">
+                    <label for="federation">Federation</label>
+                    <input type="text" class="form-control" name="Federation" placeholder="Federation" />
+                </div>
+                <div class="form-group">
+                    <label for="sex">Sex</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Sex" id="male" value="Male">
+                        <label class="form-check-label" for="male">
+                            Male
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="Sex" id="female" value="Female">
+                        <label class="form-check-label" for="female">
+                            Female
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fidetitle">Title</label>
+                    <select class="form-control" name="FIDETitle">
+                        <option value="">None</option>
+                        <option value="GM">GM (Grandmaster)</option>
+                        <option value="IM">IM (International Master)</option>
+                        <option value="FM">FM (Fide Master)</option>
+                        <option value="CM">CM (Candidate Master)</option>
+                        <option value="WGM">WGM (Woman GM)</option>
+                        <option value="WIM">WIM Woman IM</option>
+                        <option value="WFM">WFM (Woman FM</option>
+                        <option value="WCM">WCM (Woman CM)</option>
+                        <option value="AGM">AGM (Arena GM)</option>
+                        <option value="AIM">AIM (Arena IM)</option>
+                        <option value="AFM">AFM (Arena FM)</option>
+                        <option value="ACM">ACM (Arena CM)</option>
+                    </select>
+                </div>
+
+                <div class="form-group form-row">
+                    <div class="col">
+                        <label for="ratingstandard">FIDE Std</label>
+                        <input type="text" class="form-control" name="RatingStandard" placeholder="Rating Standard" />
+                    </div>
+                    <div class="col">
+                        <label for="ratingrapid">FIDE Rapid</label>
+                        <input type="text" class="form-control" name="RatingRapid" placeholder="Rating Rapid" />
+                    </div>
+                    <div class="col">
+                        <label for="ratingblitz">FIDE Blitz</label>
+                        <input type="text" class="form-control" name="RatingBlitz" placeholder="Rating Blitz" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="yearofbirth">Year Of Birth</label>
+                    <input type="text" class="form-control" name="YearOfBirth" placeholder="Year of Birth" />
+                </div>
+
+                <!-- Addition Fields -->
+
+                <div class="form-group">
+                    <label for="acfid">ACF ID</label> 
+                    <a href="#" id="search-acfid" class="btn btn-link">| Search ACF Name</a>
+                    <input type="text" class="form-control" name="ACFID" placeholder="ACFID" />
+                </div>
+                <script>
+                    document.getElementById('search-acfid').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://sachess.org.au/ratings/search?q=' + encodeURIComponent(fullName);
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+
+                <div class="form-group form-row">
+                    <div class="col">
+                        <label for="ratingacfstandard">ACF Std</label>
+                        <input type="text" class="form-control" name="RatingACFStandard" placeholder="Rating ACF Standard" />
+                    </div>
+                    <div class="col">
+                        <label for="ratingacfquick">ACF Quick</label>
+                        <input type="text" class="form-control" name="RatingACFQuick" placeholder="Rating ACF Quick" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="chesstempo">Chess Tempo</label> 
+                    <a href="#" id="search-chesstempo" class="btn btn-link">Search Chesstempo</a>
+
+                    <input type="text" class="form-control" name="ChessTempo" placeholder="Chess Tempo" />
+                </div>
+                <script>
+                    document.getElementById('search-chesstempo').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chesstempo.com';
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+                <div class="form-group">
+                    <label for="chessbase">Chess Base</label>
+                    <a href="#" id="search-chessbase" class="btn btn-link">Search Chessbase</a>
+
+                    <input type="text" class="form-control" name="ChessBase" placeholder="Chess Base" />
+                </div>
+                <script>
+                    document.getElementById('search-chessbase').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chessbase.com';
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+
+                <div class="form-group">
+                    <label for="chesscom">Chess.com</label>
+                    <a href="#" id="search-chesscom" class="btn btn-link">Search Chess.com</a>
+
+                    <input type="text" class="form-control" name="ChessCom" placeholder="Chess.com" />
+                </div>
+                <script>
+                    document.getElementById('search-chesscom').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chess.com';
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+
+                <div class="form-group">
+                    <label for="lichess">Lichess</label>
+                    <a href="#" id="search-lichess" class="btn btn-link">Search Lichess</a>
+
+                    <input type="text" class="form-control" name="Lichess" placeholder="Lichess" />
+                </div>
+                <script>
+                    document.getElementById('search-lichess').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:lichess.org';
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+                <div class="form-group">
+                    <label for="chess365">Chess 365</label>
+                    <a href="#" id="search-chess365" class="btn btn-link">Search 365chess.com</a>
+
+                    <input type="text" class="form-control" name="Chess365" placeholder="Chess 365" />
+                </div>
+                <script>
+                    document.getElementById('search-chess365').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:365chess.com';
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+
+                <div class="form-group">
+                    <label for="chessgames">Chess Games</label>
+                    <a href="#" id="search-chessgames" class="btn btn-link">Search chessgames.com</a>
+
+                    <input type="text" class="form-control" name="ChessGames" placeholder="Chess Games" />
+                </div>
+                <script>
+                    document.getElementById('search-chessgames').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.chessgames.com/perl/ezsearch.pl?search=' + encodeURIComponent(fullName);
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+
+
+
+                <div class="form-group">
+                    <label for="chessresults">Chess Results</label>
+                    <a href="#" id="search-chessresults" class="btn btn-link">Search chess-results.com</a>
+
+                    <input type="text" class="form-control" name="ChessResults" placeholder="Chess Results" />
+                </div>
+                <script>
+                    document.getElementById('search-chessresults').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var fullName = document.querySelector('input[name="FullName"]').value;
+                        if (fullName) {
+                            var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chess-results.com';
+                            window.open(searchUrl, '_blank');
+                        } else {
+                            alert('Please enter the player\'s full name first.');
+                        }
+                    });
+                </script>
+                
+                <button type="submit" class="btn btn-primary btn-block">Add Player</button>
+            </form>
+        </div>
+
+        <!-- Bootstrap JS and dependencies -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

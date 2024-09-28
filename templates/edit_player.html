@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Player: {{ player.FullName }} | {{ player.FideID }}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+
+    <!-- Nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">TOUR</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/list_players">Player List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add_chess_player">Add Player</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h1>Edit Player Information</h1>
+
+    <div class="container mt-5"></div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form action="" method="POST" class="needs-validation" novalidate>
+                    <div class="form-group">
+                        <label for="FullName">Full Name:</label>
+                        <input type="text" class="form-control" id="FullName" name="FullName" value="{{ player.FullName }}" required>
+                        <div class="invalid-feedback">Please enter the full name.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Federation">Federation:</label>
+                        <input type="text" class="form-control" id="Federation" name="Federation" value="{{ player.Federation }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Sex">Sex:</label>
+                        <input type="text" class="form-control" id="Sex" name="Sex" value="{{ player.Sex }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="YearOfBirth">Year of Birth:</label>
+                        <input type="number" class="form-control" id="YearOfBirth" name="YearOfBirth" value="{{ player.YearOfBirth }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FIDETitle">FIDE Title:</label>
+                        <input type="text" class="form-control" id="FIDETitle" name="FIDETitle" value="{{ player.FIDETitle }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RatingStandard">Rating Standard:</label>
+                        <input type="number" class="form-control" id="RatingStandard" name="RatingStandard" value="{{ player.RatingStandard }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RatingRapid">Rating Rapid:</label>
+                        <input type="number" class="form-control" id="RatingRapid" name="RatingRapid" value="{{ player.RatingRapid }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RatingBlitz">Rating Blitz:</label>
+                        <input type="number" class="form-control" id="RatingBlitz" name="RatingBlitz" value="{{ player.RatingBlitz }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ACFID">ACFID:</label>
+                        <input type="text" class="form-control" id="ACFID" name="ACFID" value="{{ player.ACFID }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RatingACFStandard">Rating ACF Standard:</label>
+                        <input type="number" class="form-control" id="RatingACFStandard" name="RatingACFStandard" value="{{ player.RatingACFStandard }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="RatingACFQuick">Rating ACF Quick:</label>
+                        <input type="number" class="form-control" id="RatingACFQuick" name="RatingACFQuick" value="{{ player.RatingACFQuick }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChessTempo">Chess Tempo:</label>
+                        <input type="text" class="form-control" id="ChessTempo" name="ChessTempo" value="{{ player.ChessTempo }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChessBase">Chess Base:</label>
+                        <input type="text" class="form-control" id="ChessBase" name="ChessBase" value="{{ player.ChessBase }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChessCom">Chess.com:</label>
+                        <input type="text" class="form-control" id="ChessCom" name="ChessCom" value="{{ player.ChessCom }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LiChess">LiChess:</label>
+                        <input type="text" class="form-control" id="LiChess" name="LiChess" value="{{ player.LiChess }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Chess365">Chess365:</label>
+                        <input type="text" class="form-control" id="Chess365" name="Chess365" value="{{ player.Chess365 }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChessGames">ChessGames:</label>
+                        <input type="text" class="form-control" id="ChessGames" name="ChessGames" value="{{ player.ChessGames }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ChessResults">ChessResults:</label>
+                        <input type="text" class="form-control" id="ChessResults" name="ChessResults" value="{{ player.ChessResults }}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
