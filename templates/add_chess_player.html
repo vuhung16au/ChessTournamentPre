@@ -6,9 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
             .centered-form {
-                max-width: 500px;
+                max-width: 70%;
                 margin: auto;
                 padding: 20px;
+            }
+            @media (max-width: 600px) {
+                .centered-form {
+                    max-width: 100%;
+                }
             }
             .navbar-toggler {
                 border: none;
@@ -36,7 +41,7 @@
         </nav>
         
         <div class="container centered-form">
-            <h3 class="text-center">Add a new Chess Player: </h3>
+            <h3 class="text-center">Add a new Chess Player </h3>
             <hr/>
             
             {%- for category, message in get_flashed_messages(with_categories = true) %}
@@ -53,9 +58,22 @@
                 }, 3000);
             </script>
             
-            <form action="{{ request.path }}" method="post">
+            <form action="{{ request.path }}" method="post" class="w-100 mx-auto"></form>
                 <div class="form-group">
                     <label for="fideid">Fide ID</label>
+                    <a href="#" id="scrap-fide-info" class="btn btn-link">Scrap FIDE info based on FIDE ID</a>
+                    <script>
+                        document.getElementById('scrap-fide-info').addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var fideID = document.querySelector('input[name="FideID"]').value;
+                            if (fideID) {
+                                var scrapUrl = '/scrap-fide-info/' + encodeURIComponent(fideID);
+                                window.open(scrapUrl, '_blank');
+                            } else {
+                                alert('Please enter the FIDE ID first.');
+                            }
+                        });
+                    </script>
                     <input type="text" class="form-control" name="FideID" placeholder="FideID" required />
 
                     <div class="invalid-feedback">

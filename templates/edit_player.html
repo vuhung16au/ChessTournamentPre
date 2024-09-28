@@ -5,10 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Player: {{ player.FullName }} | {{ player.FideID }}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            width: 100%;
+        }
+
+        @media (min-width: 600px) {
+            .form-container {
+                width: 70%;
+            }
+        }
+    </style>
 </head>
+
 <body>
-
-
     <!-- Nav bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -34,12 +44,25 @@
 
     <h1>Edit Player Information</h1>
 
-    <div class="container mt-5"></div>
+    <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-8 form-container">
                 <form action="{{ request.path }}" method="post" class="needs-validation" novalidate>
                     <div class="form-group">
                         <label for="FideID">Fide ID</label>
+                        <a href="#" id="scrap-fide-info" class="btn btn-link">Scrap FIDE info based on FIDE ID</a>
+                        <script>
+                            document.getElementById('scrap-fide-info').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fideID = document.querySelector('input[name="FideID"]').value;
+                                if (fideID) {
+                                    var scrapUrl = '/scrap-fide-info/' + encodeURIComponent(fideID);
+                                    window.open(scrapUrl, '_blank');
+                                } else {
+                                    alert('Please enter the FIDE ID first.');
+                                }
+                            });
+                        </script>
                         <input type="text" class="form-control" id="FideID" name="FideID" value="{{ player.FideID }}" required>
                         <div class="invalid-feedback">Please enter a valid FideID (must be a number and not blank).</div>
                         <script>
@@ -93,23 +116,36 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="FIDETitle">FIDE Title</label>
-                        <input type="text" class="form-control" id="FIDETitle" name="FIDETitle" value="{{ player.FIDETitle }}">
+                        <label for="fidetitle">Title</label>
+                        <select class="form-control" id="FIDETitle" name="FIDETitle">
+                            <option value="">None</option>
+                            <option value="GM" {{ 'selected' if player.FIDETitle == 'GM' else '' }}>GM (Grandmaster)</option>
+                            <option value="IM" {{ 'selected' if player.FIDETitle == 'IM' else '' }}>IM (International Master)</option>
+                            <option value="FM" {{ 'selected' if player.FIDETitle == 'FM' else '' }}>FM (Fide Master)</option>
+                            <option value="CM" {{ 'selected' if player.FIDETitle == 'CM' else '' }}>CM (Candidate Master)</option>
+                            <option value="WGM" {{ 'selected' if player.FIDETitle == 'WGM' else '' }}>WGM (Woman GM)</option>
+                            <option value="WIM" {{ 'selected' if player.FIDETitle == 'WIM' else '' }}>WIM (Woman IM)</option>
+                            <option value="WFM" {{ 'selected' if player.FIDETitle == 'WFM' else '' }}>WFM (Woman FM)</option>
+                            <option value="WCM" {{ 'selected' if player.FIDETitle == 'WCM' else '' }}>WCM (Woman CM)</option>
+                            <option value="AGM" {{ 'selected' if player.FIDETitle == 'AGM' else '' }}>AGM (Arena GM)</option>
+                            <option value="AIM" {{ 'selected' if player.FIDETitle == 'AIM' else '' }}>AIM (Arena IM)</option>
+                            <option value="AFM" {{ 'selected' if player.FIDETitle == 'AFM' else '' }}>AFM (Arena FM)</option>
+                            <option value="ACM" {{ 'selected' if player.FIDETitle == 'ACM' else '' }}>ACM (Arena CM)</option>
+                        </select>
                     </div>
-
-                    <div class="form-group">
-                        <label for="RatingStandard">Rating Standard</label>
-                        <input type="number" class="form-control" id="RatingStandard" name="RatingStandard" value="{{ player.RatingStandard }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="RatingRapid">Rating Rapid</label>
-                        <input type="number" class="form-control" id="RatingRapid" name="RatingRapid" value="{{ player.RatingRapid }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="RatingBlitz">Rating Blitz</label>
-                        <input type="number" class="form-control" id="RatingBlitz" name="RatingBlitz" value="{{ player.RatingBlitz }}">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="RatingStandard">Rating Standard</label>
+                            <input type="number" class="form-control" id="RatingStandard" name="RatingStandard" value="{{ player.RatingStandard }}">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="RatingRapid">Rating Rapid</label>
+                            <input type="number" class="form-control" id="RatingRapid" name="RatingRapid" value="{{ player.RatingRapid }}">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="RatingBlitz">Rating Blitz</label>
+                            <input type="number" class="form-control" id="RatingBlitz" name="RatingBlitz" value="{{ player.RatingBlitz }}">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -130,14 +166,15 @@
                         </script>
                     </div>
 
-                    <div class="form-group">
-                        <label for="RatingACFStandard">Rating ACF Standard</label>
-                        <input type="number" class="form-control" id="RatingACFStandard" name="RatingACFStandard" value="{{ player.RatingACFStandard }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="RatingACFQuick">Rating ACF Quick</label>
-                        <input type="number" class="form-control" id="RatingACFQuick" name="RatingACFQuick" value="{{ player.RatingACFQuick }}">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="RatingACFStandard">Rating ACF Standard</label>
+                            <input type="number" class="form-control" id="RatingACFStandard" name="RatingACFStandard" value="{{ player.RatingACFStandard }}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="RatingACFQuick">Rating ACF Quick</label>
+                            <input type="number" class="form-control" id="RatingACFQuick" name="RatingACFQuick" value="{{ player.RatingACFQuick }}">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -267,6 +304,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/list_players'">Cancel</button>
                 </form>
             </div>
         </div>

@@ -16,4 +16,13 @@ open `http://localhost:5430/`
 
 # Tournament Prep in Action 
 
-![alt text](image.png)
+## Player list 
+![alt text](image-1.png)
+
+## Add a new player 
+![alt text](image-2.png)
+
+# Note on https://github.com/xRuiAlves/fide-ratings-scraper
+
+Installation: `npm i -g fide-ratings-scraper`
+Get player info: `fide-ratings-scraper get <FideID>`

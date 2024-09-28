@@ -3,6 +3,8 @@ import sqlite3
 from flask import Flask, flash, request, render_template, redirect, url_for
 # from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
+import subprocess
+import json
 
 app = Flask(__name__)
 
@@ -207,6 +209,32 @@ def delete_player(FideID):
     player = ChessPlayers.query.get_or_404(FideID)
     db.session.delete(player)
     db.session.commit()
+    return redirect(url_for('list_players'))
+
+@app.route('/scrap-fide-info/<int:FideID>', methods=['GET', 'POST'])    
+def scrap_fide_info(FideID):
+
+    # Execute the command line script to scrape the FIDE info
+    result = subprocess.run(['fide-ratings-scraper', 'get', 'info', str(FideID)], capture_output=True, text=True)
+
+    # Parse the JSON output
+    fide_info = json.loads(result.stdout)
+
+    # Set player's info
+    player = ChessPlayers.query.get_or_404(FideID)
+    player.FullName = fide_info.get('name')
+    player.Federation = fide_info.get('federation')
+    player.YearOfBirth = fide_info.get('birth_year')
+    player.Sex = fide_info.get('sex')
+    player.FIDETitle = fide_info.get('title')
+    player.RatingStandard = fide_info.get('standard_elo')
+    player.RatingRapid = fide_info.get('rapid_elo')
+    player.RatingBlitz = fide_info.get('blitz_elo')
+
+    # print(f"Standard Rating: {player.RatingStandard}, Rapid Rating: {player.RatingRapid}, Blitz Rating: {player.RatingBlitz}")
+
+    db.session.commit()
+
     return redirect(url_for('list_players'))
 
 if __name__ == '__main__':
