@@ -37,96 +37,233 @@
     <div class="container mt-5"></div>
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form action="" method="POST" class="needs-validation" novalidate>
+                <form action="{{ request.path }}" method="post" class="needs-validation" novalidate>
                     <div class="form-group">
-                        <label for="FullName">Full Name:</label>
-                        <input type="text" class="form-control" id="FullName" name="FullName" value="{{ player.FullName }}" required>
-                        <div class="invalid-feedback">Please enter the full name.</div>
+                        <label for="FideID">Fide ID</label>
+                        <input type="text" class="form-control" id="FideID" name="FideID" value="{{ player.FideID }}" required>
+                        <div class="invalid-feedback">Please enter a valid FideID (must be a number and not blank).</div>
+                        <script>
+                            $(document).ready(function() {
+                                setTimeout(function() {
+                                    $(".invalid-feedback").fadeOut('slow');
+                                }, 2000);
+
+                                $("form").on("submit", function(event) {
+                                    var fideID = $("input[name='FideID']").val();
+                                    if (!fideID.match(/^\d+$/)) {
+                                        event.preventDefault();
+                                        alert("Please enter a valid Fide ID (must be a number and not blank).");
+                                    }
+                                });
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="Federation">Federation:</label>
+                        <label for="FullName">Full Name</label>
+                        <a href="#" id="search-fide" class="btn btn-link">| Search fide.com</a>
+                        <input type="text" class="form-control" id="FullName" name="FullName" value="{{ player.FullName }}" required>
+                        <script>
+                            document.getElementById('search-fide').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:fide.com';
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Federation">Federation</label>
                         <input type="text" class="form-control" id="Federation" name="Federation" value="{{ player.Federation }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="Sex">Sex:</label>
+                        <label for="Sex">Sex</label>
                         <input type="text" class="form-control" id="Sex" name="Sex" value="{{ player.Sex }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="YearOfBirth">Year of Birth:</label>
+                        <label for="YearOfBirth">Year of Birth</label>
                         <input type="number" class="form-control" id="YearOfBirth" name="YearOfBirth" value="{{ player.YearOfBirth }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="FIDETitle">FIDE Title:</label>
+                        <label for="FIDETitle">FIDE Title</label>
                         <input type="text" class="form-control" id="FIDETitle" name="FIDETitle" value="{{ player.FIDETitle }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="RatingStandard">Rating Standard:</label>
+                        <label for="RatingStandard">Rating Standard</label>
                         <input type="number" class="form-control" id="RatingStandard" name="RatingStandard" value="{{ player.RatingStandard }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="RatingRapid">Rating Rapid:</label>
+                        <label for="RatingRapid">Rating Rapid</label>
                         <input type="number" class="form-control" id="RatingRapid" name="RatingRapid" value="{{ player.RatingRapid }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="RatingBlitz">Rating Blitz:</label>
+                        <label for="RatingBlitz">Rating Blitz</label>
                         <input type="number" class="form-control" id="RatingBlitz" name="RatingBlitz" value="{{ player.RatingBlitz }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="ACFID">ACFID:</label>
+                        <label for="ACFID">ACFID</label>
+                        <a href="#" id="search-acfid" class="btn btn-link">| Search ACF Name</a>
                         <input type="text" class="form-control" id="ACFID" name="ACFID" value="{{ player.ACFID }}">
+                        <script>
+                            document.getElementById('search-acfid').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://sachess.org.au/ratings/search?q=' + encodeURIComponent(fullName);
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="RatingACFStandard">Rating ACF Standard:</label>
+                        <label for="RatingACFStandard">Rating ACF Standard</label>
                         <input type="number" class="form-control" id="RatingACFStandard" name="RatingACFStandard" value="{{ player.RatingACFStandard }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="RatingACFQuick">Rating ACF Quick:</label>
+                        <label for="RatingACFQuick">Rating ACF Quick</label>
                         <input type="number" class="form-control" id="RatingACFQuick" name="RatingACFQuick" value="{{ player.RatingACFQuick }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="ChessTempo">Chess Tempo:</label>
+                        <label for="ChessTempo">Chess Tempo</label>
+                        <a href="#" id="search-chesstempo" class="btn btn-link">Search Chesstempo</a>
                         <input type="text" class="form-control" id="ChessTempo" name="ChessTempo" value="{{ player.ChessTempo }}">
+                        <script>
+                            document.getElementById('search-chesstempo').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chesstempo.com';
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="ChessBase">Chess Base:</label>
+                        <label for="ChessBase">Chess Base</label>
+                        <a href="#" id="search-chessbase" class="btn btn-link">Search Chessbase</a>
                         <input type="text" class="form-control" id="ChessBase" name="ChessBase" value="{{ player.ChessBase }}">
+                        <script>
+                            document.getElementById('search-chessbase').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chessbase.com';
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="ChessCom">Chess.com:</label>
+                        <label for="ChessCom">Chess.com</label>
+                        <a href="#" id="search-chesscom" class="btn btn-link">Search Chess.com</a>
                         <input type="text" class="form-control" id="ChessCom" name="ChessCom" value="{{ player.ChessCom }}">
+                        <script>
+                            document.getElementById('search-chesscom').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chess.com';
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="LiChess">LiChess:</label>
+                        <label for="LiChess">LiChess</label>
+                        <a href="#" id="search-lichess" class="btn btn-link">Search Lichess</a>
                         <input type="text" class="form-control" id="LiChess" name="LiChess" value="{{ player.LiChess }}">
+                        <script>
+                            document.getElementById('search-lichess').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:lichess.org';
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="Chess365">Chess365:</label>
+                        <label for="Chess365">Chess365</label>
+                        <a href="#" id="search-chess365" class="btn btn-link">Search 365chess.com</a>
                         <input type="text" class="form-control" id="Chess365" name="Chess365" value="{{ player.Chess365 }}">
+                        <script>
+                            document.getElementById('search-chess365').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:365chess.com';
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="ChessGames">ChessGames:</label>
+                        <label for="ChessGames">ChessGames</label>
+                        <a href="#" id="search-chessgames" class="btn btn-link">Search chessgames.com</a>
                         <input type="text" class="form-control" id="ChessGames" name="ChessGames" value="{{ player.ChessGames }}">
+                        <script>
+                            document.getElementById('search-chessgames').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.chessgames.com/perl/ezsearch.pl?search=' + encodeURIComponent(fullName);
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <div class="form-group">
-                        <label for="ChessResults">ChessResults:</label>
+                        <label for="ChessResults">ChessResults</label>
+                        <a href="#" id="search-chessresults" class="btn btn-link">Search chess-results.com</a>
                         <input type="text" class="form-control" id="ChessResults" name="ChessResults" value="{{ player.ChessResults }}">
+                        <script>
+                            document.getElementById('search-chessresults').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                var fullName = document.querySelector('input[name="FullName"]').value;
+                                if (fullName) {
+                                    var searchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(fullName) + '+site:chess-results.com';
+                                    window.open(searchUrl, '_blank');
+                                } else {
+                                    alert('Please enter the player\'s full name first.');
+                                }
+                            });
+                        </script>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save</button>
