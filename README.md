@@ -1,9 +1,13 @@
-# What is this 
+# What is This Tool?
 
 This tool help you gather data for chess players in a single place.
 This help you prepare for tournaments, researching about your potential opponents. 
 
-# How to run 
+Some use cases 
+1. You play in your local club, city often and you want to research and track your frequently met opponents
+2. You want to prepare for your next tournament. Who are you potential opponents? What are their most played opennings?
+
+# How to Run 
 
 ```bash 
 $python3 -m venv .myenv
