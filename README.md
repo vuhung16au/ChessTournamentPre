@@ -1,11 +1,11 @@
 # What is This Tool?
 
-This tool help you gather data for chess players in a single place.
-This help you prepare for tournaments, researching about your potential opponents. 
+This tool help you gather data for chess players in a single place, 
+making it easier to prepare for tournaments and research potential opponents. 
 
 Some use cases 
-1. You play in your local club, city often and you want to research and track your frequently met opponents
-2. You want to prepare for your next tournament. Who are you potential opponents? What are their most played openings?
+1. Regularly play at your local club, city? Track and research your frequent opponents.
+2. Prepare for your next tournament? Identify your potential opponents and analyze their most played openings.
 
 # How to Run 
 
