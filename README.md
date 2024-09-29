@@ -5,7 +5,7 @@ This help you prepare for tournaments, researching about your potential opponent
 
 Some use cases 
 1. You play in your local club, city often and you want to research and track your frequently met opponents
-2. You want to prepare for your next tournament. Who are you potential opponents? What are their most played opennings?
+2. You want to prepare for your next tournament. Who are you potential opponents? What are their most played openings?
 
 # How to Run 
 
